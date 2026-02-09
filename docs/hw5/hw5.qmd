@@ -1,0 +1,164 @@
+---
+title: "hw5"
+format: html
+output-file: "index"
+---
+
+### Exercise 2
+
+**a.**
+
+![Example of marginal distribution added on X and Y axis of a scatter plot](https://r-graph-gallery.com/277-marginal-histogram-for-ggplot2_files/figure-html/unnamed-chunk-1-1.png){width="50%"}
+
+[Marginal distribution with ggplot2 and ggExtra](https://r-graph-gallery.com/277-marginal-histogram-for-ggplot2.html)
+
+**b. What marks are being used? What variables are mapped to which properties?**
+
+The data they used is `mtcars`.
+
+```{r}
+head(mtcars)
+```
+
+This graph uses two marks: points and bars.
+
+**Points**
+
+-   x position: wt
+
+-   y position: mpg
+
+-   color: cyl
+
+-   size: cyl
+
+**Bar**
+
+-   x position & count: wt
+
+-   y position & count: mpg
+
+**c. What is the main story of this graphic?**
+
+It shows the scatter plot of x to y as well as each x and y distributions around the scatter plot. I'm not sure what mpg and wt values represent since the website doesn't include explanation for the data.
+
+**d. What makes it a good graphic?**
+
+It is a good graphic because it shows the same information in multiple ways: overlaying a dot plot of x vs. y and two histograms for each x and y.
+
+**e. What features do you think you would know how to implement in Vega-Lite?**
+
+It seems quite simple to make the scatter plot and histogram separately. I would have to do most of the work in `encoding`.
+
+**Are there any features of the graphic that you would not know how to do in Vega-Lite? If so, list them.**
+
+Overlaying different types of marks
+
+### Exercise 3
+
+```{r}
+```
+
+**1 )**
+
+```{r}
+library(vegawidget)
+
+'
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "data": {
+    "url": "https://calvin-data304.netlify.app/data/weather-with-dates.csv"
+  },
+  "height": 200,
+  "width": 500,
+  "mark": "line",
+  
+  "encoding": {
+    "x": {
+      "field": "date",
+      "type": "temporal",
+      "timeUnit": "monthdate",
+      "title": "Month"
+    },
+    "y": {
+      "field": "temp_max", 
+      "type": "quantitative", 
+      "title": "Mean Temperature"
+    },
+    "color": {"field": "year"},
+    "opacity": {"value": 0.5}
+  }
+}' |> as_vegaspec()
+```
+
+**2)** The graphic should show 12 months.
+
+My first graph: separating each year by color
+
+```{r}
+'{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "data": {
+    "url": "https://calvin-data304.netlify.app/data/weather-with-dates.csv"
+  },
+  "height": 200,
+  "width": 500,
+  "mark": "line",
+  "transform": [
+  {
+    "calculate": "(datum.temp_max + datum.temp_min) / 2",
+    "as": "temp_mean"
+  }
+],
+  "encoding": {
+    "x": {
+      "field": "date",
+      "type": "temporal",
+      "timeUnit": "month",
+      "title": "Month"
+    },
+    "y": {
+      "field": "temp_mean",
+      "type": "quantitative",
+      "aggregate": "mean",
+      "title": "Mean Temperature"
+    },
+    "color": {"field": "year"},
+    "opacity": {"value": 0.7}
+  }
+}' |> as_vegaspec()
+```
+
+My second graph: showing the mean of all four years
+
+```{r}
+'{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "data": {
+    "url": "https://calvin-data304.netlify.app/data/weather-with-dates.csv"
+  },
+  "height": 200,
+  "width": 500,
+  "mark": "line",
+  "transform": [
+  {
+    "calculate": "(datum.temp_max + datum.temp_min) / 2",
+    "as": "temp_mean"
+  }
+],
+  "encoding": {
+    "x": {
+      "field": "date",
+      "type": "temporal",
+      "timeUnit": "month"
+    },
+    "y": {
+      "field": "temp_mean",
+      "type": "quantitative",
+      "aggregate": "mean"
+    },
+    "opacity": {"value": 0.7}
+  }
+}' |> as_vegaspec()
+```
