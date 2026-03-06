@@ -5,19 +5,9 @@ format:
     output-file: "index"
 embed-resources: true
 ---
-::: {.lead}
-Welcome!
-:::
-This is a collection of my data visualization projects for the DATA 304 course.
 
 ## Homework
 
-[HW 5](hw5/) Starting a Portfolio
+[HW 5](hw5/index.html)
 
-[HW 6](hw6/) Tufte and Composite Graphics
-
-[HW 7](hw7/) Perception and more practice
-
-[HW 8](hw8/) Data operations and graphics
-
-[Final Portfolio](final_portfolio/)
+[HW 6](hw6/index.html)

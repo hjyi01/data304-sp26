@@ -1,21 +1,18 @@
 ---
 title: "hw5"
-format: 
-  html:
-    code-fold: true
+format: html
 output-file: "index"
 ---
 
-## Exercise 2: Deconstructing a Graphic
+### Exercise 2
 
-#### **a. Copy of the graphic**
+**a.**
 
-![Marginal distribution added on X and Y axis of a scatter plot](https://r-graph-gallery.com/277-marginal-histogram-for-ggplot2_files/figure-html/unnamed-chunk-1-1.png){width="70%" fig-align="center"}
+![Example of marginal distribution added on X and Y axis of a scatter plot](https://r-graph-gallery.com/277-marginal-histogram-for-ggplot2_files/figure-html/unnamed-chunk-1-1.png){width="50%"}
 
-[Reference: Marginal distribution with ggplot2 and ggExtra](https://r-graph-gallery.com/277-marginal-histogram-for-ggplot2.html)
+[Marginal distribution with ggplot2 and ggExtra](https://r-graph-gallery.com/277-marginal-histogram-for-ggplot2.html)
 
-
-#### **b. What marks are being used? What variables are mapped to which properties?**
+**b. What marks are being used? What variables are mapped to which properties?**
 
 The data they used is `mtcars`.
 
@@ -41,25 +38,28 @@ This graph uses two marks: points and bars.
 
 -   y position & count: mpg
 
-#### **c. What is the main story of this graphic?**
+**c. What is the main story of this graphic?**
 
 It shows the scatter plot of x to y as well as each x and y distributions around the scatter plot. I'm not sure what mpg and wt values represent since the website doesn't include explanation for the data.
 
-#### **d. What makes it a good graphic?**
+**d. What makes it a good graphic?**
 
 It is a good graphic because it shows the same information in multiple ways: overlaying a dot plot of x vs. y and two histograms for each x and y.
 
-#### **e. What features do you think you would know how to implement in Vega-Lite?**
+**e. What features do you think you would know how to implement in Vega-Lite?**
 
 It seems quite simple to make the scatter plot and histogram separately. I would have to do most of the work in `encoding`.
 
-#### **Are there any features of the graphic that you would not know how to do in Vega-Lite? If so, list them.**
+**Are there any features of the graphic that you would not know how to do in Vega-Lite? If so, list them.**
 
 Overlaying different types of marks
 
-## Exercise 3
+### Exercise 3
 
-#### **1 ) high temperature in Seattle each day**
+```{r}
+```
+
+**1 )**
 
 ```{r}
 library(vegawidget)
@@ -92,9 +92,7 @@ library(vegawidget)
 }' |> as_vegaspec()
 ```
 
-#### **2) mean temperature for each month**
-
-The graphic should show 12 months.
+**2)** The graphic should show 12 months.
 
 My first graph: separating each year by color
 
