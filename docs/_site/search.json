@@ -21,27 +21,6 @@
     "text": "What is the most interesting lesson, guide, or piece of advice Tufte offers you in this chapter?\nTufte shares some of his favorite graphics in this chapter. Pick one (but not the one about the military advance on and retreat from Russia) and answer the following.\n\nWhat page is your graphic on? Take a screen shot and include the image as well, if you can.\nWhy did you pick the graphic you chose?\nWhat encoding channels are used in the graphic? What variables are they associated with?\nWhat, if any, elements of the graphic would be hard/impossible for you to implement in Vega-Lite (given what we know so far)?\nWhat point is Tufte illustrating with this graphic?"
   },
   {
-    "objectID": "hw6/index.html#exercise-1",
-    "href": "hw6/index.html#exercise-1",
-    "title": "hw6",
-    "section": "",
-    "text": "What is the most interesting lesson, guide, or piece of advice Tufte offers you in this chapter?\nTufte shares some of his favorite graphics in this chapter. Pick one (but not the one about the military advance on and retreat from Russia) and answer the following.\n\nWhat page is your graphic on? Take a screen shot and include the image as well, if you can.\nWhy did you pick the graphic you chose?\nWhat encoding channels are used in the graphic? What variables are they associated with?\nWhat, if any, elements of the graphic would be hard/impossible for you to implement in Vega-Lite (given what we know so far)?\nWhat point is Tufte illustrating with this graphic?"
-  },
-  {
-    "objectID": "hw6/index.html#exercise-2",
-    "href": "hw6/index.html#exercise-2",
-    "title": "hw6",
-    "section": "Exercise 2",
-    "text": "Exercise 2\nList one or two ideas that you learned in these sections that will change the way you design and create data graphics."
-  },
-  {
-    "objectID": "hw6/index.html#exercise-3",
-    "href": "hw6/index.html#exercise-3",
-    "title": "hw6",
-    "section": "Exercise 3",
-    "text": "Exercise 3"
-  },
-  {
     "objectID": "exercises/index.html",
     "href": "exercises/index.html",
     "title": "Exercise 8",
@@ -68,5 +47,26 @@
     "title": "hw5",
     "section": "Exercise 3",
     "text": "Exercise 3\n\n1 ) high temperature in Seattle each day\n\n\nCode\nlibrary(vegawidget)\n\n\nWarning: package 'vegawidget' was built under R version 4.3.3\n\n\nCode\n'\n{\n  \"$schema\": \"https://vega.github.io/schema/vega-lite/v5.json\",\n  \"data\": {\n    \"url\": \"https://calvin-data304.netlify.app/data/weather-with-dates.csv\"\n  },\n  \"height\": 200,\n  \"width\": 500,\n  \"mark\": \"line\",\n  \n  \"encoding\": {\n    \"x\": {\n      \"field\": \"date\",\n      \"type\": \"temporal\",\n      \"timeUnit\": \"monthdate\",\n      \"title\": \"Month\"\n    },\n    \"y\": {\n      \"field\": \"temp_max\", \n      \"type\": \"quantitative\", \n      \"title\": \"Mean Temperature\"\n    },\n    \"color\": {\"field\": \"year\"},\n    \"opacity\": {\"value\": 0.5}\n  }\n}' |&gt; as_vegaspec()\n\n\n\n\n\n\n\n\n2) mean temperature for each month\nThe graphic should show 12 months.\nMy first graph: separating each year by color\n\n\nCode\n'{\n  \"$schema\": \"https://vega.github.io/schema/vega-lite/v5.json\",\n  \"data\": {\n    \"url\": \"https://calvin-data304.netlify.app/data/weather-with-dates.csv\"\n  },\n  \"height\": 200,\n  \"width\": 500,\n  \"mark\": \"line\",\n  \"transform\": [\n  {\n    \"calculate\": \"(datum.temp_max + datum.temp_min) / 2\",\n    \"as\": \"temp_mean\"\n  }\n],\n  \"encoding\": {\n    \"x\": {\n      \"field\": \"date\",\n      \"type\": \"temporal\",\n      \"timeUnit\": \"month\",\n      \"title\": \"Month\"\n    },\n    \"y\": {\n      \"field\": \"temp_mean\",\n      \"type\": \"quantitative\",\n      \"aggregate\": \"mean\",\n      \"title\": \"Mean Temperature\"\n    },\n    \"color\": {\"field\": \"year\"},\n    \"opacity\": {\"value\": 0.7}\n  }\n}' |&gt; as_vegaspec()\n\n\n\n\n\n\nMy second graph: showing the mean of all four years\n\n\nCode\n'{\n  \"$schema\": \"https://vega.github.io/schema/vega-lite/v5.json\",\n  \"data\": {\n    \"url\": \"https://calvin-data304.netlify.app/data/weather-with-dates.csv\"\n  },\n  \"height\": 200,\n  \"width\": 500,\n  \"mark\": \"line\",\n  \"transform\": [\n  {\n    \"calculate\": \"(datum.temp_max + datum.temp_min) / 2\",\n    \"as\": \"temp_mean\"\n  }\n],\n  \"encoding\": {\n    \"x\": {\n      \"field\": \"date\",\n      \"type\": \"temporal\",\n      \"timeUnit\": \"month\"\n    },\n    \"y\": {\n      \"field\": \"temp_mean\",\n      \"type\": \"quantitative\",\n      \"aggregate\": \"mean\"\n    },\n    \"opacity\": {\"value\": 0.7}\n  }\n}' |&gt; as_vegaspec()"
+  },
+  {
+    "objectID": "hw6/index.html#exercise-1",
+    "href": "hw6/index.html#exercise-1",
+    "title": "hw6",
+    "section": "",
+    "text": "What is the most interesting lesson, guide, or piece of advice Tufte offers you in this chapter?\nTufte shares some of his favorite graphics in this chapter. Pick one (but not the one about the military advance on and retreat from Russia) and answer the following.\n\nWhat page is your graphic on? Take a screen shot and include the image as well, if you can.\nWhy did you pick the graphic you chose?\nWhat encoding channels are used in the graphic? What variables are they associated with?\nWhat, if any, elements of the graphic would be hard/impossible for you to implement in Vega-Lite (given what we know so far)?\nWhat point is Tufte illustrating with this graphic?"
+  },
+  {
+    "objectID": "hw6/index.html#exercise-2",
+    "href": "hw6/index.html#exercise-2",
+    "title": "hw6",
+    "section": "Exercise 2",
+    "text": "Exercise 2\nList one or two ideas that you learned in these sections that will change the way you design and create data graphics."
+  },
+  {
+    "objectID": "hw6/index.html#exercise-3",
+    "href": "hw6/index.html#exercise-3",
+    "title": "hw6",
+    "section": "Exercise 3",
+    "text": "Exercise 3"
   }
 ]
