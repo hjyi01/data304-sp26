@@ -1,0 +1,24 @@
+project:
+  type: website
+  output-dir: docs
+    
+website:
+  title: "Heewon Yi's Portfolio"
+  navbar:
+    background: secondary
+    search: true
+    left:
+      - text: "Final Portfolio"
+        href: content/final/final.qmd
+    right:
+      - icon: linkedin
+        text: "LinkedIn"
+        href: www.linkedin.com/in/heewon-j-yi
+
+format:
+  html:
+    theme: sandstone
+    embed-resources: true
+    toc: true
+    toc-location: right
+    toc-depth: 2

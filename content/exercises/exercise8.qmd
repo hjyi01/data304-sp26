@@ -1,7 +1,6 @@
 ---
 title: "Exercise8"
 format: html
-editor: visual
 ---
 
 
