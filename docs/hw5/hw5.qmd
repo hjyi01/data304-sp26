@@ -3,7 +3,6 @@ title: "hw5"
 format: 
   html:
     code-fold: true
-output-file: "index"
 ---
 
 ## Exercise 2: Deconstructing a Graphic

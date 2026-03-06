@@ -3,7 +3,6 @@ title: "hw6"
 format: 
   html:
     code-fold: true
-output-file: "index"
 ---
 
 ## Exercise 1
