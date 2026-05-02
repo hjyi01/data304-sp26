@@ -12,6 +12,8 @@ This is a collection of my data visualization projects for the DATA 304 course.
 
 ## Homework
 
+[HW 4](content/hw4/hw4.qmd){.btn .btn-outline-primary .btn-sm role="button"}  Reading, Drawing, and Vega-Lite
+
 [HW 5](content/hw5/hw5.qmd){.btn .btn-outline-primary .btn-sm role="button"}  Starting a Portfolio
 
 [HW 6](content/hw6/hw6.qmd){.btn .btn-outline-primary .btn-sm role="button"}  Tufte and Composite Graphics
