@@ -18,7 +18,7 @@ This is a collection of my data visualization projects for the DATA 304 course.
 
 [HW 6](content/hw6/hw6.qmd){.btn .btn-outline-primary .btn-sm role="button"}  Tufte and Composite Graphics
 
-[HW 7](content/hw7/hw7.qmd){.btn .btn-outline-primary .btn-sm role="button"}  Perception and more practice
+[HW 7](content/hw07/hw07.qmd){.btn .btn-outline-primary .btn-sm role="button"}  Perception and more practice
 
 [HW 8](content/hw8/hw8.qmd){.btn .btn-outline-primary .btn-sm role="button"}  Data operations and graphics
 

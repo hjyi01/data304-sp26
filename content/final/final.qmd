@@ -341,7 +341,7 @@ head(movies)
 '{
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "title": {
-    "text": "Movies: Popularity vs. Rating (by Genre)",
+    "text": "Movies: Popularity(k) vs. Rating (by Genre)",
     "fontSize": 20, "anchor": "middle", "offset": 15
   },
   "data": {
@@ -453,7 +453,7 @@ I wanted to see the compare the distribution by genre by laying them out side by
     "url": "https://raw.githubusercontent.com/hjyi01/others/refs/heads/main/movies_lite.csv"
   },
   "title": {
-    "text": "Movies: Popularity vs. Rating (Regression Line)",
+    "text": "Movies: Popularity(k) vs. Rating (Regression Line)",
     "fontSize": 20, "anchor": "middle", "offset": 15
   },
   "transform": [

@@ -1,0 +1,348 @@
+---
+title: "hw7"
+format: 
+  html:
+    code-fold: true
+---
+
+## Exercise 1 (Wilke on visualizing amounts)
+
+#### a. List some guidelines/advice Wilke gives about creating bar charts.
+
+- Always start at zero.
+- For long category labels, it is better two swap the x and y axis to make a horizontal bar plot.
+- Bars should be ordered in a meaningful way.
+    - If the categories have no natural order, bars should be arranged by their data values (ascending/descending).
+    - But if the categories represent ordered variable, the natural order should be kept.
+- For plots that display only few numbers, adding the actual numbers to the plot increases information density and removes the need for an explicit y axis.
+
+#### b. When is it not advised to use a bar chart? Why?
+
+**Limitation of bar chart:** they need to start at zero.
+It is not advised to use a bar chart when the data consists of values that are far from zero and have relatively small differences between them (e.g., life expectancy between 60 and 81 years).
+
+#### c. What alternatives to bars are mentioned in this chapter?
+
+- Dot plots: placing dots at specific locations along an axis
+    - They are particularly useful when the axis range needs to be limited (not starting at zero) to highlight small differences.
+- Heatmaps: map data values onto a color scale rather than a position scale
+    - They are preferred for very large or complex datasets where bars or dots would make the figure too busy to identify broader trends.
+
+#### d. What guidance does Wilke give about whether or not to stack bars vs. dodge them (using an offset in Vega-Lite)?
+
+Stack bars?
+
+- Stacking is appropriate only when the sum of the individual bars represents a meaningful total amount.
+- **Do not** stack values where the sum is not meaningful (e.g., median incomes).
+
+Dodge
+
+- Grouped bars are used to visualize two categorical variables simultaneously.
+    - They require the viewer to match bar colors to a legend.
+- Wilke prefers using small multiples (separate regular bar plots for each category) to avoid the need for color-coding and simplify comparisons.
+
+
+#### e. Recreate Figure 6.3 in Vega-Lite.
+
+```{r}
+library(vegawidget)
+
+'
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "data": {
+    "url": "https://calvin-data304.netlify.app/data/cow-movies.csv"
+  },
+  "transform": [
+    {"calculate": "datum.amount / 1000000", "as": "amount_millions"}
+  ],
+  "width": 400,
+  "height": 250,
+  "mark": "bar",
+  "encoding": {
+    "x": {
+      "field": "amount_millions", 
+      "type": "quantitative",
+      "title": "weekend gross (million USD)",
+      "axis": {"format": ".0f", "tickMinStep": 20}
+    },
+    "y": {
+      "field": "title_short", 
+      "type": "nominal",
+      "title": null,
+      "sort": {"field": "amount", "order": "descending"}
+    }
+  }
+}' |> as_vegaspec()
+```
+
+
+#### f. Recreate Figures 6.8 and 6.9 in Vega-Lite.
+
+##### Figure 6.8
+```{r}
+'
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "data": {
+    "url": "https://calvin-data304.netlify.app/data/cow-income.csv"
+  },
+  "transform": [
+    {"filter": "indexof([\'asian\', \'white\', \'hispanic\', \'black\'], datum.race) !== -1"}
+  ],
+  "width": 400,
+  "height": 250,
+  "mark": "bar",
+  "encoding": {
+    "x": {
+      "field": "race", 
+      "type": "nominal",
+      "title": null,
+      "axis": {"labelAngle": 0, "values": ["asian", "white", "hispanic", "black"],
+  "labelExpr": "{\'asian\': \'Asian\', \'white\': \'white\', \'hispanic\': \'Hispanic\', \'black\': \'black\'}[datum.label]" }
+    },
+    "y": {
+      "field": "median_income", 
+      "type": "quantitative",
+      "title": "median income (USD)",
+      "axis": {"format": "$,d"}
+    },
+    "xOffset": {"field": "age"},
+    "color": {"field": "age", "scale": {"scheme": "purpleblue"}, "title": "age (yrs)"}
+  }
+}' |> as_vegaspec()
+```
+
+##### Figure 6.9
+```{r}
+'
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "data": {
+    "url": "https://calvin-data304.netlify.app/data/cow-income.csv"
+  },
+  "transform": [
+    {"filter": "indexof([\'asian\', \'white\', \'hispanic\', \'black\'], datum.race) !== -1"}
+  ],
+  "facet": {
+    "field": "race", "type": "nominal", "title": "Age Groups", "values": ["asian", "white", "hispanic", "black"], "header": {"labelExpr": "{\'asian\': \'Asian\', \'white\': \'white\', \'hispanic\': \'Hispanic\', \'black\': \'black\'}[datum.label]", "title": null}, "sort": ["asian", "white", "hispanic", "black"]
+  },
+  "columns": 2,
+  "spec": {
+    "width": 250,
+    "height": 130,
+    "mark": "bar",
+    "encoding": {
+      "x": {
+        "field": "age",
+        "type": "nominal",
+        "title": null,
+        "axis": {
+          "labelAngle": 0, "labelExpr": "replace(datum.label, \' to \', \'-\')"}
+      },
+      "y": {
+        "field": "median_income",
+        "type": "quantitative",
+        "title": "Median Income (USD)",
+        "axis": {"format": "$,d", "tickCount": 6}
+      }
+    }
+  }
+}' |> as_vegaspec()
+```
+
+
+#### g. Recreate Figure 6.11 and explain why Figures 6.12 and 6.13 are labeled “bad”.
+
+```{r}
+'
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "data": {
+    "url": "https://calvin-data304.netlify.app/data/cow-gapminder.csv"
+  },
+  "transform": [
+    {"filter": "datum.continent == \'Americas\' && datum.year == \'2007\'"}
+  ],
+  "width": 300,
+  "height": 300,
+  "mark": {"type": "point", "filled": true},
+  "encoding": {
+    "x": {
+      "field": "lifeExp",
+      "type": "quantitative",
+      "title": "life expectancy (years)",
+      "scale": {"domain": [60, 82]},
+      "axis": {"tickMinStep": 5}
+    },
+    "y": {
+      "field": "country",
+      "type": "nominal",
+      "title": null,
+      "sort": {"field": "lifeExp", "order": "descending"},
+      "axis": {"grid": true}
+    }
+  }
+}' |> as_vegaspec()
+```
+
+- Figure 6.12
+    - The bars are too long because they start at zero.
+    - Human eyes are drawn to the middle of the bars rather than to their end points, and thus fails to convey the message.
+
+- Figure 6.13
+    - The labels are disordered (alphabetical), which makes the graphic difficult to read. This also fails to convey a clear message.
+
+## Exercise 2 (A video presentation by Healy)
+
+#### a. Watch [this video](https://youtu.be/r6-3_bdcofg?si=5tw1QBT5ke_A5ak2&t=1398) starting at 12:18 until 49:52. (You are welcome to watch the whole thing if you like.) You will see some things that look familiar from our discussion of perception in class, but there are also a number of additional examples and discussion.
+
+#### b. List at least three pieces of advice you can glean from this video that might help you design good graphics.
+
+- Rely on fixed baselines instead of angles or floating areas.
+- Design with your specific audience in mind.
+- Use a "layer, highlight, and repeat" strategy.
+
+#### c. There are two figures in this video that come from Chapter 1 of Tufte (2001). Did you spot them? Which figures are they?
+
+
+
+## Exercise 3 (Heat maps)  
+
+#### a. In Vega-Lite lingo, what makes something be a heat map?
+
+In Vega-Lite lingo, a heatmap is defined by mapping quantitative values to the color channel instead of using a position scale like bars or dots. It identifies broad trends by representing magnitudes through a color gradient across two categorical variables.
+
+#### b. Recreate Figure 6.14 or 6.15 from Wilke (2019) (your choice). Or get fancy and include an interactive element that let’s you select the year to order by. [CSV]
+
+```{r}
+'
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "data": {
+    "url": "https://calvin-data304.netlify.app/data/cow-internet2.csv"
+  },
+  "transform": [
+    {"filter": "datum.year >= 1994 && datum.year <= 2016"},
+    {"calculate": "datum.year == 2016 ? datum.users : 0", "as": "order"}
+  ],
+  "width": 600,
+  "height": 350,
+  "mark": {"type": "rect", "stroke": "white", "strokeWidth": 0.5},
+  "encoding": {
+    "x": {
+      "field": "year",
+      "type": "ordinal",
+      "title": null,
+      "axis": {"labelAngle": 0}
+    },
+    "y": {
+      "field": "country",
+      "type": "nominal",
+      "title": null,
+      "axis": {"orient": "right"},
+      "sort": {"field": "order", "op": "max", "order": "descending"}
+    },
+    "color": {
+      "field": "users",
+      "type": "quantitative",
+      "title": "Internet users / 100 people",
+      "scale": {"scheme": "magma"},
+      "legend": {"orient": "top"}
+    },
+    "tooltip": [
+      {"field": "country", "type": "nominal"},
+      {"field": "year", "type": "ordinal"},
+      {"field": "users", "type": "quantitative", "title": "Internet Users (%)", "format": ".1f"}
+    ]
+  },
+  "config": {
+    "view": {"stroke": "transparent"},
+    "axis": {"domain": false}
+  },
+  "config": {
+    "view": {"fill": "black"}
+  }
+}' |> as_vegaspec()
+```
+
+
+#### c. At around 20:10, Healy presents a possible problem with heat maps, what is it?
+
+Heatmaps are susceptible to the "Mach band effect" (or relative contrast issues). The human eye is bad at judging colors accurately because a color looks different depending on the colors next to it. As a result, it is hard for viewers to match exact values across the map.
+
+#### d. But starting at around 44:12, he presents a heat map as a “show pony”. Why isn’t the problem presented earlier an issue here? Is it an issue in the figure you make in part b? Why or why not?
+
+In this specific map, we don't need to see exact numbers for every square. Heatmaps are effective when the goal is to see broader trends and massive patterns (like the "scars" left by wars) across a huge amount of data. If this is the case, we do not need the viewers to determine exact differences in colors.
+
+## Exercise 4 (Pie charts)  
+
+#### a. What does Healy have to say about pie charts in his video?
+
+Healy hates pie charts. He argues humans are much better at comparing bar lengths than judging angles or areas.
+
+#### b. How does that compare to what Wilke says in Section 10.1 of Wilke (2019)?
+
+Wilke is more flexible. He thinks pie charts are good for visually emphasizing simple fractions (like one-half, one-third, or one-quarter) and work very well for small datasets.
+
+#### c. What alternatives does Wilke present to pie charts and in what situations does he favor each? (You should be comparing pie charts to two other types of graphics that can be made with the same sort of data.)
+
+**Side-by-side Bars:** Use these to compare individual parts to each other (e.g., comparing the growth of five different companies).
+
+**Stacked Bars:** Use these to show how proportions change over time or to show how parts add up to a meaningful total amount.
+
+#### d. We won’t make many pie charts, but I suppose you should make at least one. To do this in Vega-Lite, use an arc mark. Recreate Figure 10.1 of Wilke (2019).
+
+```{r}
+'
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 400,
+  "height": 400,
+  "data": {
+    "values": [
+      {"parties": "CDU/CSU", "seats": 243},
+      {"parties": "SPD", "seats": 214},
+      {"parties": "FDP", "seats": 39}
+    ]
+  },
+  "layer": [
+    {
+      "mark": {"type": "arc", "outerRadius": 180, "stroke": "white", "strokeWidth": 1},
+      "encoding": {
+        "theta": {"field": "seats", "type": "quantitative", "stack": true},
+        "color": {
+          "field": "parties",
+          "type": "nominal",
+          "legend": null,
+          "scale": {
+            "domain": ["CDU/CSU", "SPD", "FDP"],
+            "range": ["DimGray", "Maroon", "GoldenRod"]
+          }
+        },
+        "order": {"field": "seats", "type": "quantitative", "sort": "ascending"}
+      }
+    },
+    {
+      "mark": {"type": "text", "radius": 110, "fontSize": 18, "fill": "white"},
+      "encoding": {
+        "theta": {"field": "seats", "type": "quantitative", "stack": true},
+        "text": {"field": "seats", "type": "quantitative"},
+        "order": {"field": "seats", "type": "quantitative", "sort": "ascending"}
+      }
+    },
+    {
+      "mark": {"type": "text", "radius": 220, "fontSize": 16, "fontWeight": "normal"},
+      "encoding": {
+        "theta": {"field": "seats", "type": "quantitative", "stack": true},
+        "text": {"field": "parties", "type": "nominal"},
+        "color": {"value": "black"},
+        "order": {"field": "seats", "type": "quantitative", "sort": "ascending"}
+      }
+    }
+  ]
+}' |> as_vegaspec()
+```
+
+
+

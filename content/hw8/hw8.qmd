@@ -1,0 +1,341 @@
+---
+title: "hw8"
+format: 
+  html:
+    code-fold: true
+---
+
+
+
+## Exercise 1. Supply and demand
+
+```{r}
+library(vegawidget)
+```
+
+
+
+
+```{r}
+'
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "data": {
+    "url": "https://calvin-data304.netlify.app/data/swd-lets-practice-ex-2-3.json"
+  },
+  "columns": 2,
+  "concat": [
+    {
+      "title": "1",
+      "width": 200, "height": 120,
+      "transform": [
+        {"fold": ["capacity", "demand"], "as": ["key", "value"]}
+      ],
+      "mark": "bar",
+      "encoding": {
+        "x": {"field": "date", "type": "temporal", "timeUnit": "yearmonth"},
+        "y": {"field": "value", "type": "quantitative"},
+        "xOffset": {"field": "key", "sort": "descending"},
+        "color": {"field": "key"}
+      }
+    },
+    {
+      "title": "2",
+      "width": 200, "height": 120,
+      "layer": [
+        {"mark": "line", "encoding": {"x": {"field": "date", "type": "temporal"}, "y": {"field": "capacity", "type": "quantitative"}, "color": {"datum": "capacity"}}},
+        {"mark": "line", "encoding": {"x": {"field": "date", "type": "temporal"}, "y": {"field": "demand", "type": "quantitative"}, "color": {"datum": "demand"}}}
+      ]
+    },
+    {
+      "title": "3",
+      "width": 200, "height": 120,
+      "layer": [
+        {"mark": {"type": "bar", "size": 8}, "encoding": {"x": {"field": "date", "type": "temporal"}, "y": {"field": "demand", "type": "quantitative"}, "color": {"datum": "demand"}}},
+        {"mark": {"type": "bar", "size": 13}, "encoding": {"x": {"field": "date", "type": "temporal"}, "y": {"field": "capacity", "type": "quantitative"}, "color": {"datum": "capacity"}}}
+      ]
+    },
+    {
+      "title": "4",
+      "width": 200, "height": 120,
+      "layer": [
+        {"mark": {"type": "bar"}, "encoding": {"x": {"field": "date", "type": "temporal"}, "y": {"field": "demand", "type": "quantitative"}, "color": {"datum": "demand"}}},
+        {"mark": {"type": "bar"}, "encoding": {"x": {"field": "date", "type": "temporal"}, "y": {"field": "capacity", "type": "quantitative"}, "color": {"datum": "capacity"}}}
+      ]
+    },
+    {
+      "title": "5",
+      "width": 200, "height": 120,
+      "layer": [
+        {"mark": {"type":"rule", "strokeWidth": 3, "stroke": "grey"}, "encoding": {"x": {"field": "date", "type": "temporal"}, "y": {"field": "capacity", "type": "quantitative"}, "y2": {"field": "demand"}}},
+        {"mark": {"type": "point", "fill": "white", "size": 40}, "encoding": {"x": {"field": "date", "type": "temporal"}, "y": {"field": "capacity", "type": "quantitative"}, "color": {"datum": "capacity"}}},
+        {"mark": {"type": "point", "fill": "white", "size": 40}, "encoding": {"x": {"field": "date", "type": "temporal"}, "y": {"field": "demand", "type": "quantitative"}, "color": {"datum": "demand"}}}
+      ]
+    },
+    {
+      "title": "6",
+      "width": 200, "height": 120,
+      "transform": [
+        {"calculate": "max(0, datum.demand - datum.capacity)", "as": "unmet"}
+      ],
+      "layer": [
+        {
+          "mark": "line",
+          "encoding": {
+            "x": {"field": "date", "type": "temporal"},
+            "y": {"field": "unmet", "type": "quantitative"}, "color": {"datum": "capacity"}
+          }
+        },
+        {
+          "mark": {"type": "point", "filled": true},
+          "encoding": {
+            "x": {"field": "date", "type": "temporal"},
+            "y": {"field": "unmet", "type": "quantitative"}, "color": {"datum": "capacity"}
+          }
+        }
+      ]      
+    }
+  ],
+  "config": {
+    "axis": {"title": null},
+    "range": {
+      "category": ["mediumblue", "deepskyblue"] 
+    }
+  }
+}' |> as_vegaspec()
+```
+
+
+## Exercise 2. Jobs
+
+**example graphic**
+```{r}
+'{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "spec": {
+    "mark": {"type": "point"},
+    "transform": [
+      {"pivot": "year", "value": "perc", "groupby": ["job", "sex"]}
+    ],
+    "encoding": {
+      "x": {
+        "field": "1850",
+        "type": "quantitative",
+        "scale": {"constant": 0.00001, "type": "symlog"}
+      },
+      "y": {
+        "field": "2000",
+        "type": "quantitative",
+        "scale": {"constant": 0.00001, "type": "symlog"}
+      },
+      "tooltip": [
+        {"field": "job"},
+        {"field": "sex"},
+        {"field": "1850"},
+        {"field": "2000"}
+      ]
+    }
+  },
+  "facet": {"column": {"field": "sex", "title": "", "type": "nominal"}},
+  "title": {
+    "text": "Percent of people working various jobs",
+    "subtitle": "Each dot represents the one occupation. Hover to see which occupation it is."
+  },
+  "data": {
+    "url": "https://cdn.jsdelivr.net/npm/vega-datasets@2.8.0/data/jobs.json"
+  }
+}' |> as_vegaspec()
+```
+
+#### a. Create a graphic that shows the sum of all the values of perc in each year separated by men and women. Explain what your graphic reveals about what perc means.
+
+```{r}
+'
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "data": {
+    "url": "https://cdn.jsdelivr.net/npm/vega-datasets@2.8.0/data/jobs.json"
+  },
+  "width": 400,
+  "height": 200,
+  "mark": "line",
+  "encoding": {
+    "x": {"field": "year", "type": "quantitative"},
+    "y": {
+      "aggregate": "sum",
+      "field": "perc", "type": "quantitative"
+    },
+    "color": {"field": "sex"}
+  }
+}' |> as_vegaspec()
+```
+`perc` seems to be representing the percentage of each job and sex relative to the total population in that year.
+
+#### b.
+
+```{r}
+'
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "transform": [
+    {"filter": {"field": "year", "oneOf": [1850, 1900, 1950, 2000]}},
+    {"pivot": "sex", "value": "perc", "groupby": ["job", "year"]}
+  ],
+  "facet": {"field": "year", "type": "nominal", "title": "Year"},
+  "columns": 2,
+  "spec": {
+    "width": 200,
+    "height": 200,
+    "mark": {"type": "point"},
+    "encoding": {
+      "x": {
+        "field": "men",
+        "type": "quantitative",
+        "scale": {"constant": 0.00001, "type": "symlog"},
+        "axis": {"format": ".0%"},
+        "title": "Percentage of Men"
+      },
+      "y": {
+        "field": "women",
+        "type": "quantitative",
+        "scale": {"constant": 0.00001, "type": "symlog"},
+        "axis": {"format": ".0%"},
+        "title": "Percentage of Women"
+      },
+      "tooltip": [
+        {"field": "job"},
+        {"field": "men"},
+        {"field": "women"}
+      ]
+    }
+  },
+  "title": {
+    "text": "Percent of men and women working various jobs",
+    "subtitle": "Comparing employment share by gender across years. Each dot represents the one occupation. Hover to see which occupation it is."
+  },
+  "data": {
+    "url": "https://cdn.jsdelivr.net/npm/vega-datasets@2.8.0/data/jobs.json"
+  }
+}' |> as_vegaspec()
+```
+
+#### c.
+
+```{r}
+'
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "transform": [
+    {"pivot": "sex", "value": "perc", "groupby": ["job", "year"]},
+    {"filter": {"field": "year", "oneOf": [1850, 1900, 1950, 2000]}},
+    {
+      "joinaggregate": [
+        {"op": "sum", "field": "men", "as": "total_men_perc"},
+        {"op": "sum", "field": "women", "as": "total_women_perc"}
+      ],
+      "groupby": ["year"]
+    },
+    {"calculate": "datum.men / datum.total_men_perc", "as": "prop_men"},
+    {"calculate": "datum.women / datum.total_women_perc", "as": "prop_women"}
+  ],
+  "facet": {"field": "year", "type": "nominal", "title": "Year"},
+  "columns": 2,
+  "spec": {
+    "width": 200,
+    "height": 200,
+    "mark": {"type": "point"},
+    "encoding": {
+      "x": {
+        "field": "prop_men",
+        "type": "quantitative",
+        "scale": {"type": "symlog", "constant": 0.0001},
+        "axis": {"format": ".0%"},
+        "title": "Within-Men Percentage"
+      },
+      "y": {
+        "field": "prop_women",
+        "type": "quantitative",
+        "scale": {"type": "symlog", "constant": 0.0001},
+        "axis": {"format": ".0%"},
+        "title": "Within-Women Percentage"
+      },
+      "tooltip": [
+        {"field": "job"},
+        {"field": "prop_men", "format": ".01%", "title": "% of All Men"},
+        {"field": "prop_women", "format": ".01%", "title": "% of All Women"}
+      ]
+    }
+  },
+  "title": {
+    "text": "Comparing Career Concentrations Within Genders",
+    "subtitle": ["Each dot represents an occupation. Axes show the percentage of men and women employed in that job,","relative to their respective total gender populations."]
+  },
+  "data": {
+    "url": "https://cdn.jsdelivr.net/npm/vega-datasets@2.8.0/data/jobs.json"
+  }
+}' |> as_vegaspec()
+```
+
+
+
+
+## Exercise 3. Price at the pump
+
+```{r}
+'{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "data": {
+    "url": "https://raw.githubusercontent.com/hjyi01/others/refs/heads/main/pump_price_for_gasoline_us_per_liter.csv"
+  },
+  "transform": [
+    {
+      "fold": ["1991", "1992", "1993", "1994", "1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016"],
+      "as": ["year_raw", "price_raw"]
+    },
+    {"calculate": "toNumber(datum.price_raw)","as": "price"},
+    {"calculate": "toNumber(datum.year_raw)","as": "year"},
+    {
+      "lookup": "country",
+      "from": {
+        "data": {"url": "https://raw.githubusercontent.com/lukes/ISO-3166-Countries-with-Regional-Codes/master/all/all.csv"},
+        "key": "name",
+        "fields": ["region", "sub-region"]
+      }
+    },
+    { "filter": "isValid(datum.price)"},
+    {
+      "aggregate": [{"op": "mean", "field": "price", "as": "avg_price"}],
+      "groupby": ["region", "year"]
+    }
+  ],
+  "width": 400,
+  "height": 250,
+  "mark": {"type": "line"},
+  "encoding": {
+    "x": {
+      "field": "year", 
+      "type": "quantitative", 
+      "axis": {"format": "y"},
+      "title": "Year"
+    },
+    "y": {
+      "field": "avg_price", 
+      "type": "quantitative", 
+      "title": "Average Price (USD)"
+    },
+    "color": {"field": "region", "type": "nominal", "title": "Region"},
+    "tooltip": [
+      {"field": "year"},
+      {"field": "region"},
+      {"field": "avg_price", "title": "Average Price (USD)", "format": "0.2f"}
+    ]
+  },
+  "title":{
+    "text": "Gasoline Pump Price Trend by Region"
+  }
+}' |> as_vegaspec()
+```
+
+#### Do any countries fail to get matched?
+
+Yes, some of the countries failed to get matched. This is because of the different notations of countries. For example, the same country is named `South Korea` in gas prices (US $ per liter) from GapMinder and `"Korea, Republic of"` in countries, regions, and codes data.
